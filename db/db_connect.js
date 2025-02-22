@@ -2,7 +2,7 @@ import { connect } from 'mongoose';
 
 export const dbConnect = async () => {
     try{
-        await connect(process.env.ATLAS_URI, {
+        await connect(process.env.MDB_URL, {
             useNewUrlParser: true,
             useUnifiedTopology: true
         });
