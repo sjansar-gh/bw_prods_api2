@@ -41,7 +41,7 @@ export const ProductSchema = new Schema({
 );
 
 export const ProductModel = new model("product", ProductSchema, 'bw_products');
-export const ProductModel2 = new model("product", ProductSchema, 'bw_products2');
+//export const ProductModel = new model("product", ProductSchema, 'bw_products2');
 
 // const p1 = new ProductModel({
 //     sku: 'FF611SJA2',
