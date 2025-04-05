@@ -1,13 +1,14 @@
 //import { dbConnect } from "../db/db_connect.js"
 import bcrypt from "bcrypt";
 import { UserModel } from "../db/models/user_model.js";
+import { logger } from '../utils/logger.js';
 
   export async function userExist(user_email, user_password) {
     const user = await UserModel.findOne({ email: user_email });
     if(user){
       const hash = user.password;
       const matched = bcrypt.compareSync(user_password, hash);
-      console.log('find matched: ', matched);
+      logger.info('find matched: ', matched);
     }
     if(user){
       return user;
@@ -18,13 +19,13 @@ import { UserModel } from "../db/models/user_model.js";
     if(userPayload){
         let userExist = await UserModel.findOne({ email: userPayload.email });
         if(userExist){
-            console.log(`User ${userPayload.email} already exists`);
+            logger.info(`User ${userPayload.email} already exists`);
             return null;
         }else{
             //const userCreated = await UserModel.create(userPayload);
             const newUser = new UserModel(userPayload);
             const userCreated = await newUser.save();
-            console.log('userCreated', userCreated);
+            logger.info('userCreated', userCreated);
             return userCreated;
         }
     }
@@ -41,7 +42,7 @@ import { UserModel } from "../db/models/user_model.js";
   export async function getUserProfile(email_id) {
     const projection = { _id: 0, password: 0 }
     const user_found = await UserModel.findOne({ email: email_id }, projection);
-    console.log('user_found = ', user_found);
+    logger.info('user_found = ', user_found);
     if(user_found && user_found.email){
       return user_found;
     }else return null;
@@ -61,10 +62,10 @@ import { UserModel } from "../db/models/user_model.js";
             password: user_payload.password
         }
         const user_b4_updated = await UserModel.findOneAndUpdate(filter, update_payload);
-        //console.log('user_b4_updated = ', JSON.stringify(user_b4_updated));
+        //logger.info('user_b4_updated = ', JSON.stringify(user_b4_updated));
 
         const user_post_updated = await UserModel.find(filter);
-        //console.log(JSON.stringify(user_post_updated));
+        //logger.info(JSON.stringify(user_post_updated));
         return 'updated';
         
     }else{
