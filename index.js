@@ -306,21 +306,23 @@ const generateWebToken = (user) => {
   return user;
 };
 
-app.listen(PORT, () => {
+const http_server = app.listen(PORT, () => {
   console.log("bw_api server started ...");
   console.log(`bw_api server listening on ${PORT}`);
   logger.info("bw_api server started ...");
   logger.info(`bw_api server listening on ${PORT}`);
 });
 
-const server = https.createServer(
-  {
-    key: fs.readFileSync("./secrets/private_key.pem"),
-    cert: fs.readFileSync("./secrets/certificate.pem"),
-    passphrase: "brasswork_secret",
-  },
-  app
-);
+http_server.setTimeout(3 * 60 * 1000); //2 minutes
+
+// const https_server = https.createServer(
+//   {
+//     key: fs.readFileSync("./secrets/private_key.pem"),
+//     cert: fs.readFileSync("./secrets/certificate.pem"),
+//     passphrase: "brasswork_secret",
+//   },
+//   app
+// );
 
 // server.listen(443, () => {
 //     logger.info('HTTPS server listening');
