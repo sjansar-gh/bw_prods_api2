@@ -1,12 +1,14 @@
 import xlsx from "xlsx";
 import * as fw from "./file_writer.js";
+import * as constants from "../constants/constant.js";
 
 export function convertExcelToJson1() {
   // Read the file
-  //const workbook = xlsx.readFile("./uploads/bw_mini_db_30.xlsx");
-  //const workbook = xlsx.readFile("./uploads/bw_full_data_2024.xlsx");
+  const upload_folder_path = constants.uploads_folder;
+  //const workbook = xlsx.readFile(`${upload_folder_path}/bw_mini_db_30.xlsx`);
+  //const workbook = xlsx.readFile(`${upload_folder_path}/bw_full_data_2024.xlsx`);
   const workbook = xlsx.readFile(
-    "./uploads/product_sheet_3_26_2025_12_46_55.xlsx"
+    `${upload_folder_path}/product_sheet_3_26_2025_12_46_55.xlsx`
   );
 
   // Get the first sheet
@@ -23,7 +25,7 @@ export function convertExcelToJson1() {
   let result = sheet2arr(worksheet);
   //console.log('result = ', result);
   console.log("result.length = ", result.length);
-  fw.createJsonFile("./uploads/test3_1_full.json", result);
+  fw.createJsonFile(`${upload_folder_path}/test3_1_full.json`, result);
 }
 
 var sheet2arr = function (sheet) {

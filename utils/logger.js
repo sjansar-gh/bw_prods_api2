@@ -1,14 +1,15 @@
 import pino from "pino";
 import { join } from "path";
+import * as constants from "../constants/constant.js";
 
-const __dirname = "./logs";
+const __dirname = constants.logs_folder;
 
 const transport = pino.transport({
   targets: [
     {
       target: "pino-roll",
       options: {
-        file: join("logs", "log"),
+        file: join(__dirname, "log"),
         frequency: "daily",
         mkdir: true,
         size: "100k",

@@ -10,7 +10,7 @@ import {
   createProductsJsonFile,
 } from "../utils/file_writer.js";
 
-const download_folder = "./downloads";
+const download_folder = constants.downloads_folder;
 export const download_router = express.Router();
 download_router.use(cors(constants.CORS_OPT));
 
@@ -18,7 +18,7 @@ download_router.route("/excel_sheet").get(async (req, resp) => {
   logger.info(req.url);
 
   //create products json file
-  const json_file = "products_full.json";
+  const json_file = "products_json.json";
   const excel_file_name = "products_sheet.xlsx";
   let json_file_status = await createProductsJsonFile(json_file);
 
@@ -36,7 +36,8 @@ download_router.route("/excel_sheet").get(async (req, resp) => {
   const file_size = stats?.bsize | 0;
 
   var options = {
-    root: ".",
+    //root: ".",
+    root: download_folder,
     dotfiles: "deny",
     headers: {
       "x-timestamp": Date.now(),
@@ -48,13 +49,15 @@ download_router.route("/excel_sheet").get(async (req, resp) => {
     },
   };
 
-  resp
-    .status(200)
-    .sendFile(`${download_folder}/${excel_file_name}`, options, (err) => {
-      if (err) {
-        logger.error(`Error! ${err}`);
-      } else {
-        logger.error("Excel file sent successfully");
-      }
-    });
+  resp.status(200).sendFile(`${excel_file_name}`, options, (err) => {
+    if (err) {
+      logger.error(`Error! ${err}`);
+      resp
+        .status(200)
+        .setHeader("Content-Type", "application/json")
+        .json({ status: "error", msg: err });
+    } else {
+      logger.info("Excel file sent successfully");
+    }
+  });
 });

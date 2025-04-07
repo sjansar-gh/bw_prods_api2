@@ -5,7 +5,9 @@ import xlsx from "xlsx";
 //import { getAllProducts, insertDataInBatches } from "../mdb_api/mdb_api.js";
 import * as db_util from "../db/db_util.js";
 import { logger } from "./logger.js";
+import * as constants from "../constants/constant.js";
 
+const downloads_folder = constants.downloads_folder;
 //const content = 'Some content!';
 
 //create json file from json data.
@@ -21,7 +23,7 @@ export function createJsonFile(filePath, content) {
 
 //convert json file to excel file.
 export function convertJSONToExcel(json_file, excel_file_name) {
-  const json_file_path = `./downloads/${json_file}`;
+  const json_file_path = `${downloads_folder}/${json_file}`;
   try {
     let products_data = fs.readFileSync(json_file_path, { encoding: "utf-8" });
     if (products_data) {
@@ -44,7 +46,7 @@ function createExcelFile(json_data, excel_file_name) {
     xlsx.utils.book_append_sheet(workbook, work_sheet, "Sheet1");
 
     //Save excel file to disk
-    const excel_file_path = `./downloads/${excel_file_name}`;
+    const excel_file_path = `${downloads_folder}/${excel_file_name}`;
     xlsx.writeFile(workbook, excel_file_path);
     logger.info(`Excel file created successfully at: ${excel_file_path}`);
   } catch (err) {
@@ -62,10 +64,10 @@ export async function createProductsJsonFile(json_file) {
       throw Error("Error in db_util.getAllPructs()");
     }
     const json_prods = JSON.stringify(prods, null, 2);
-    fs.writeFileSync(`./downloads/${json_file}`, json_prods, {
+    fs.writeFileSync(`${downloads_folder}/${json_file}`, json_prods, {
       encoding: "utf-8",
     });
-    const stat_json_file = fs.statSync(`./downloads/${json_file}`);
+    const stat_json_file = fs.statSync(`${downloads_folder}/${json_file}`);
     if (stat_json_file && stat_json_file.size > 0) {
       logger.info(`${json_file} created`);
       json_file_created = true;
@@ -81,18 +83,20 @@ export function getLatestExcelFile(dirPath) {
   let latest_file = null;
   let latest_file_size = 0;
   let latest_m_time = 0;
+  let upload_folder = constants.uploads_folder;
 
   try {
-    let src_file = "./uploads/product_sheet_3_26_2025_12_46_55.xlsx";
-    let dest_file = "./uploads/products_sheet_latest.xlsx";
-    const files_exists = fs.existsSync(
-      "./uploads/product_sheet_3_26_2025_12_46_55.xlsx"
-    );
-    if (files_exists) {
-      fs.copyFileSync(src_file, dest_file);
-    }
-    logger.info(`file ${dest_file} created`);
-    logger.info(`${src_file} exist: ${files_exists}`);
+    // let src_file = `${upload_folder}/product_sheet_3_26_2025_12_46_55.xlsx`;
+    // let dest_file = `${upload_folder}/products_sheet_latest.xlsx`;
+    // const files_exists = fs.existsSync(
+    //   `${upload_folder}/product_sheet_3_26_2025_12_46_55.xlsx`
+    // );
+    // if (files_exists) {
+    //   fs.copyFileSync(src_file, dest_file);
+    // }
+    // logger.info(`file ${dest_file} created`);
+    // logger.info(`${src_file} exist: ${files_exists}`);
+
     let files = fs.readdirSync(dirPath);
     files = files.filter((f) => f.endsWith(".xlsx"));
     if (files) {

@@ -2,6 +2,7 @@ import { dbConnect } from "../db/db_connect.js";
 import { ProductModel } from "../db/models/product_model.js";
 import * as fs from "fs";
 import { logger } from "../utils/logger.js";
+import * as constants from "../constants/constant.js";
 
 await dbConnect(); //mongoose
 //await createAdmin();
@@ -90,9 +91,11 @@ const BATCH_SIZE = 1000; // Adjust as needed
 
 export async function insertDataInBatches() {
   let success = false;
+  const json_file_path = `${constants.uploads_folder}/products_json_latest.json`;
   try {
     const data = JSON.parse(
-      fs.readFileSync("./uploads/products_json_latest.json")
+      //fs.readFileSync("./uploads/products_json_latest.json")
+      fs.readFileSync(json_file_path)
     );
 
     for (let i = 0; i < data.length; i += BATCH_SIZE) {

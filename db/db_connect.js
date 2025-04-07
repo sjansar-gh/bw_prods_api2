@@ -1,9 +1,10 @@
 import { connect } from "mongoose";
 import { logger } from "../utils/logger.js";
+import { mdb_url } from "../constants/constant.js";
 
 export const dbConnect = async () => {
   try {
-    await connect(process.env.MDB_URL, {
+    await connect(mdb_url, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
