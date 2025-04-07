@@ -108,7 +108,7 @@ export async function insertNewProductsToDB() {
       logger.error("JSON file products_json_latest.json does not exist");
     }
   } catch (error) {
-    logger.error(`Error! in db_util.insertDataInBatches()`);
+    logger.error(`Error! in db_util.insertDataInBatches(): ${error}`);
     data_inserted = false;
   }
   return data_inserted;

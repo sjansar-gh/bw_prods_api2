@@ -71,9 +71,8 @@ export async function createProductsJsonFile(json_file) {
       json_file_created = true;
     }
   } catch (err) {
-    logger.error("Error!" + err);
+    logger.error(`Error! ${err}`);
   }
-  logger.info("file products_100.json created");
   return json_file_created;
 }
 

@@ -3,4 +3,4 @@
 /uploads/*
 # /downloads/*
 # !/downloads
-/constants/*
+/logs/*

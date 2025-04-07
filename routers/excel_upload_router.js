@@ -1,7 +1,9 @@
 import express from "express";
 import multer from "multer";
+import cors from "cors";
 import { logger } from "../utils/logger.js";
-import { convertExcelToJson1 } from "../utils/xlsx_reader.js";
+//import { convertExcelToJson1 } from "../utils/xlsx_reader.js";
+import * as constants from "../constants/constant.js";
 import {
   convertExcelToJson2,
   insertNewProductsToDB,
@@ -18,6 +20,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 export const upload_router = express.Router();
+upload_router.use(cors(constants.CORS_OPT));
 
 upload_router
   .route("/data_sheet")
@@ -55,7 +58,7 @@ upload_router.route("/convertToJson").get((req, resp) => {
   logger.info(req.url);
   try {
     const sheet_name = req.query.sheet;
-    console.log("sheet_name: ", sheet_name);
+    logger.info(`sheet_name: ${sheet_name}`);
 
     //convertExcelToJson1();
     const status = convertExcelToJson2(sheet_name);

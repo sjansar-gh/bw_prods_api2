@@ -1,9 +1,10 @@
 import express from "express";
 import * as fs from "fs";
+import cors from "cors";
 import { logger } from "../utils/logger.js";
-import { getAllProducts } from "../mdb_api/mdb_api.js";
+//import { getAllProducts } from "../mdb_api/mdb_api.js";
+import * as constants from "../constants/constant.js";
 
-//
 import {
   convertJSONToExcel,
   createProductsJsonFile,
@@ -11,6 +12,7 @@ import {
 
 const download_folder = "./downloads";
 export const download_router = express.Router();
+download_router.use(cors(constants.CORS_OPT));
 
 download_router.route("/excel_sheet").get(async (req, resp) => {
   logger.info(req.url);
@@ -50,7 +52,7 @@ download_router.route("/excel_sheet").get(async (req, resp) => {
     .status(200)
     .sendFile(`${download_folder}/${excel_file_name}`, options, (err) => {
       if (err) {
-        logger.error("Error! " + err);
+        logger.error(`Error! ${err}`);
       } else {
         logger.error("Excel file sent successfully");
       }

@@ -82,7 +82,7 @@ export async function getUniqueCategories() {
     "categories"
   );
 
-  logger.info(`categories: ${categories}`);
+  logger.info(`total categories: ${categories.length}`);
   return categories;
 }
 
@@ -102,7 +102,7 @@ export async function insertDataInBatches() {
     }
     success = true;
   } catch (err) {
-    logger.error("Error inserting data:", err);
+    logger.error(`Error inserting data: ${err}`);
     success = false;
   } finally {
     logger.info("insertDataInBatches() completed");
@@ -114,7 +114,9 @@ export async function getAllProducts() {
   const query = "";
   const projection = { _id: 0 };
   const all_products = await ProductModel.find({}, projection);
-  logger.info(`all_products: ${all_products}`);
+  if (all_products) {
+    logger.info(`all_products from DB: ${all_products.length}`);
+  }
   return all_products;
 }
 
